@@ -1,5 +1,5 @@
 {
-    "name": "stesi/yii2-googlemaps",
+    "name": "stesi/yii2-google-maps",
     "description": "Package to use google maps api",
     "type": "package",
     "minimum-stability": "dev",
