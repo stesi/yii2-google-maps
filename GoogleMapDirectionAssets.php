@@ -5,11 +5,8 @@ namespace stesi\googlemaps;
 use yii\web\AssetBundle;
 
 /**
- * SelectMapLocationWidget assets class
- *
- * @author Max Kalyabin <maksim@kalyabin.ru>
- * @package yii2-select-google-map-location
- * @copyright (c) 2015, Max Kalyabin, http://github.com/kalyabin
+ * Class GoogleMapDirectionAssets
+ * @package stesi\googlemaps
  */
 class GoogleMapDirectionAssets extends AssetBundle
 {
@@ -19,6 +16,10 @@ class GoogleMapDirectionAssets extends AssetBundle
         'js/yii2-google-maps.js',
 
     ];
+    public $publishOptions = [
+        'forceCopy' => true
+    ];
+
     public $depends = [
         'yii\web\YiiAsset',
     ];
@@ -32,18 +33,4 @@ class GoogleMapDirectionAssets extends AssetBundle
         $this->js[] = 'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=true&key=' . \Yii::$app->params['googleMapApiKey'];
     }
 
-    /**
-     * @inheritdoc
-     */
-    /*public static function register($view)
-    {
-        /* @var $view \yii\web\View */
-    /*if (empty(self::$googleMapApiKey))
-    {
-    self::$googleMapApiKey = \Yii::$app->params['googleMapApiKey'];
-    }
-
-    $view->registerJsFile('https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=true&key=' . self::$googleMapApiKey);
-    return parent::register($view);
-    }*/
 }

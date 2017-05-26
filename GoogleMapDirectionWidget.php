@@ -2,6 +2,7 @@
 
 namespace stesi\googlemaps;
 
+use yii\base\Widget;
 use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -10,36 +11,13 @@ use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\widgets\InputWidget;
 
+
 /**
- * Widget for select map location. It\'s render google map and input field for type a map location.
- * Latitude and longitude are provided in the attributes $attributeLatitude and $attributeLongitude.
- * Base usage:
- *
- * $form->field($model, 'location')->widget(\app\widgets\SelectMapLocationWidget::className(), [
- *     'attributeLatitude' => 'latitude',
- *     'attributeLongitude' => 'longitude',
- * ]);
- *
- * or
- *
- * \app\widgets\SelectMapLocationWidget::widget([
- *     'model' => $model,
- *     'attribute' => 'location',
- *     'attributeLatitude' => 'latitude',
- *     'attributeLongitude' => 'longitude',
- * ]);
- *
- * @author Max Kalyabin <maksim@kalyabin.ru>
- * @package yii2-select-google-map-location
- * @copyright (c) 2015, Max Kalyabin, http://github.com/kalyabin
- *
- * @property Model $model base yii2 model or ActiveRecord object
- * @property string $attribute attribute to write map location
- * @property string $attributeLatitude attribute to write location latitude
- * @property string $attributeLongitude attribute to write location longitude
- * @property callable|null $renderWidgetMap custom function to render map
+ * Class GoogleMapDirectionWidget
+ * @package stesi\googlemaps
  */
-class GoogleMapDirectionWidget extends InputWidget
+
+class GoogleMapDirectionWidget extends Widget
 {
     public $coords;
 
@@ -81,6 +59,8 @@ class GoogleMapDirectionWidget extends InputWidget
      */
     public function run()
     {
+
+
         parent::run();
 
         if (!isset($this->wrapperOptions)) {
