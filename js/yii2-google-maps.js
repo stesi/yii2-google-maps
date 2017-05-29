@@ -1,5 +1,37 @@
 (function ($) {
+    $.fn.showMap = function (options) {
 
+        var map;
+        var mapOptions = {
+            center: new google.maps.LatLng(55.997778, 37.190278),
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+            panControl: true
+        };
+        map = new google.maps.Map($(this).get(0), mapOptions);
+        var marker = null;
+        var createMarker = function (latLng) {
+            // удалить маркер если уже был
+            if (marker) {
+                marker.remove();
+            }
+            marker = new google.maps.Marker({
+                'position': latLng,
+                'map': map
+            });
+
+            marker.remove = function () {
+                google.maps.event.clearInstanceListeners(this);
+                this.setMap(null);
+            };
+            map.setCenter(latLng);
+            google.maps.event.addListener(map, 'idle', function () {
+                google.maps.event.trigger(map, 'resize');
+            });
+        };
+        createMarker(new google.maps.LatLng(options.latitude, options.longitude))
+
+    }
     $.fn.directionMap = function (options) {
         var self = this;
         var map;
@@ -7,7 +39,7 @@
         var mapOptions = {
             center: new google.maps.LatLng(55.997778, 37.190278),
             zoom: 12,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
             panControl: true
         };
         map = new google.maps.Map($(self).get(0), mapOptions);
@@ -20,35 +52,41 @@
         var directionsDisplay = new google.maps.DirectionsRenderer({
             map: map
         });
-        google.maps.event.addListener(map, 'click', function(event) {
+        google.maps.event.addListener(map, 'click', function (event) {
             console.log(event)
         });
         if (typeof options.coords != 'undefined') {
-            var coords = convertCoords(options.coords);
-            var flightPath = new google.maps.Polyline({
-                path: coords,
-                geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeWeight: 2
-            });
-            flightPath.setMap(map);
-            directionsDisplay.setMap(map)
+            var coords = [];
             var waypoints = [];
-
-            $.each(coords, function (i, v) {
-                var marker = new google.maps.Marker({
-                    position: v,
+            $.each(options.coords, function (i, v) {
+                var latLng = new google.maps.LatLng(v.lat, v.lng);
+                coords.push(latLng);
+                var MarkerOpts = {
+                    position: latLng,
                     label: 'label' + i,
-                    map: map,
-                    icon:'/images/icons/eseguito.png'
-                });
-              console.log(i);
+                    map: map
+                };
+                if (typeof options.defaultMarkerIcon != 'undefined') {
+                    MarkerOpts['icon'] = options.defaultMarkerIcon;
+                }
+                var marker = new google.maps.Marker(MarkerOpts);
                 waypoints.push({
-                    location: v,
+                    location: latLng,
                     stopover: true
                 });
-            })
+
+            });
+            if (options.showPoly) {
+                var flightPath = new google.maps.Polyline({
+                    path: coords,
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                });
+                flightPath.setMap(map);
+            }
+            directionsDisplay.setMap(map)
             map.setCenter(start)
             var start = coords.shift();
             var end = coords.pop();
@@ -70,14 +108,5 @@
         });
     }
 
-        var convertCoords = function (coords) {
-            var crd = [];
-            //    debugger;
-            $.each(coords, function (i, v) {
-                var latLng = new google.maps.LatLng(v.lat, v.lng);
-                crd.push(latLng)
-            })
-            return crd;
-        }
 
 })(jQuery);
