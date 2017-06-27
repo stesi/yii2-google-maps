@@ -72,6 +72,8 @@ class GoogleMapShowMapWidget extends Widget
             $this->wrapperOptions['style'] = 'width: 100%; height: 500px;';
         }
 
+        $this->registerAssets();
+
         $mapHtml = Html::tag('div', '', $this->wrapperOptions);
 
         return $mapHtml;
