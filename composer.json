@@ -3,8 +3,15 @@
     "description": "Package to use google maps api",
     "type": "package",
     "minimum-stability": "dev",
+    "keywords": ["yii2","extension","google map"],
+    "authors": [
+        {
+            "name": "STeSI",
+            "email": "info@stesi.srl"
+        }
+    ],
     "require": {
-        "php": ">=5.3.0"
+        "yiisoft/yii2": "2.*"
     },
     "autoload": {
         "psr-4": {

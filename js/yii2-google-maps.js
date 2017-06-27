@@ -31,7 +31,7 @@
         };
         createMarker(new google.maps.LatLng(options.latitude, options.longitude))
 
-    }
+    };
     $.fn.directionMap = function (options) {
         var self = this;
         var map;
@@ -55,7 +55,7 @@
         google.maps.event.addListener(map, 'click', function (event) {
             console.log(event)
         });
-        if (typeof options.coords != 'undefined') {
+        if (typeof options.coords !== 'undefined') {
             var coords = [];
             var waypoints = [];
             $.each(options.coords, function (i, v) {
@@ -66,7 +66,7 @@
                     label: 'label' + i,
                     map: map
                 };
-                if (typeof options.defaultMarkerIcon != 'undefined') {
+                if (typeof options.defaultMarkerIcon !== 'undefined') {
                     MarkerOpts['icon'] = options.defaultMarkerIcon;
                 }
                 var marker = new google.maps.Marker(MarkerOpts);
@@ -86,8 +86,8 @@
                 });
                 flightPath.setMap(map);
             }
-            directionsDisplay.setMap(map)
-            map.setCenter(start)
+            directionsDisplay.setMap(map);
+            map.setCenter(start);
             var start = coords.shift();
             var end = coords.pop();
         }
