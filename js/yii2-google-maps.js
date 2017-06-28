@@ -61,15 +61,15 @@
             $.each(options.coords, function (i, v) {
                 var latLng = new google.maps.LatLng(v.lat, v.lng);
                 coords.push(latLng);
-                var MarkerOpts = {
-                    position: latLng,
-                    label: 'label' + i,
-                    map: map
-                };
-                if (typeof options.defaultMarkerIcon !== 'undefined') {
-                    MarkerOpts['icon'] = options.defaultMarkerIcon;
-                }
-                var marker = new google.maps.Marker(MarkerOpts);
+                // var MarkerOpts = {
+                //     position: latLng,
+                //     label: v.label,
+                //     map: map
+                // };
+                // if (typeof options.defaultMarkerIcon !== 'undefined') {
+                //     MarkerOpts['icon'] = options.defaultMarkerIcon;
+                // }
+                //var marker = new google.maps.Marker(MarkerOpts);
                 waypoints.push({
                     location: latLng,
                     stopover: true
@@ -103,10 +103,9 @@
             if (status === google.maps.DirectionsStatus.OK) {
                 directionsDisplay.setDirections(response);
             } else {
-                window.alert('Errore Google Maps: ' + status);
+                window.alert('Google Maps error: ' + status);
             }
         });
     }
-
 
 })(jQuery);
