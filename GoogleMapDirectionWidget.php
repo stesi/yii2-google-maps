@@ -4,10 +4,8 @@ namespace stesi\googlemaps;
 
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
-
 
 /**
  * Class GoogleMapDirectionWidget
@@ -15,39 +13,69 @@ use yii\web\JsExpression;
  */
 class GoogleMapDirectionWidget extends Widget
 {
-    /**
-     * @var array
-     */
-    public $coords;
+    const TRAVEL_MODE_DRIVING = 'DRIVING';
+    const TRAVEL_MODE_BICYCLING = 'BICYCLING';
+    const TRAVEL_MODE_TRANSIT = 'TRANSIT';
+    const TRAVEL_MODE_WALKING = 'WALKING';
+
+    const MAP_TYPE_HYBRID = 'google.maps.MapTypeId.HYBRID';
 
     /**
-     * @var array options for map wrapper div
+     * @var string
      */
-    public $wrapperOptions = [];
-
-    public $showPoly = true;
+    public $travelMode = self::TRAVEL_MODE_DRIVING;
 
     /**
-     * @var array options for attribute text input
+     * @var array|null
      */
-    public $textOptions = ['class' => 'form-control'];
+    public $transitOptions;
 
-    public $defaultMarkerIcon;
+    /**
+     * @var array|null
+     */
+    public $drivingOptions;
+
+    public $unitSystem;
+
+    /**
+     * @var bool
+     */
+    public $optimizeWaypoints;
+
+    /**
+     * @var bool
+     */
+    public $provideRouteAlternatives;
+
+    /**
+     * @var bool
+     */
+    public $avoidHighways;
+
+    /**
+     * @var bool
+     */
+    public $avoidTolls;
+
+    /**
+     * @var string
+     */
+    public $region;
+
 
     /**
      * @var array JavaScript options
      */
     public $jsOptions = [];
 
-    /**
-     * @var callable function for custom map render
-     */
-    public $renderWidgetMap;
+    public $mapOptions = [];
+
+    protected $script = '';
 
     /**
-     * @var string Google API Key for Google Maps
+     * @var string
      */
-    public $googleMapApiKey;
+    public $mapDiv;
 
     /**
      * @inheritdoc
@@ -56,9 +84,19 @@ class GoogleMapDirectionWidget extends Widget
     {
         parent::init();
 
-        $this->id = uniqid('map_');
-        $defaultMarker = !empty($this->defaultMarkerIcon) ? ['defaultMarkerIcon' => $this->defaultMarkerIcon] : [];
-        $this->jsOptions = ArrayHelper::merge($this->jsOptions, ['coords' => $this->coords], $defaultMarker, ['showPoly' => $this->showPoly]);
+        $this->mapOptions = ArrayHelper::merge([
+            'zoom' => 12,
+            'mapTypeId' => self::MAP_TYPE_HYBRID,
+        ], $this->mapOptions);
+        $this->mapOptions['mapTypeId'] = new JsExpression($this->mapOptions['mapTypeId']);
+
+        $this->script .= 'var gMap = $("' . $this->mapDiv . '");';
+        $this->script .= 'gMap.googleMaps(' . Json::encode($this->mapOptions) . ');';
+    }
+
+    public function direction($options)
+    {
+        $this->script .= 'gMap.googleMaps("direction", ' . Json::encode($options) . ');';
     }
 
     /**
@@ -66,25 +104,9 @@ class GoogleMapDirectionWidget extends Widget
      */
     public function run()
     {
-        if (!isset($this->wrapperOptions['id'])) {
-            $this->wrapperOptions['id'] = $this->id;
-        }
-
-        if (!isset($this->wrapperOptions['style'])) {
-            $this->wrapperOptions['style'] = 'width: 100%; height: 500px;';
-        }
-
-        $this->registerAssets();
-
-        $mapHtml = Html::tag('div', '', $this->wrapperOptions);
-
-        return $mapHtml;
-    }
-
-    public function registerAssets()
-    {
         $view = $this->getView();
         GoogleMapAsset::register($view);
-        $view->registerJs('$("#' . $this->wrapperOptions['id'] . '").directionMap(' . Json::encode($this->jsOptions) . ');');
+
+        $view->registerJs($this->script);
     }
 }
