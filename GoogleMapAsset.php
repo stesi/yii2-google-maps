@@ -10,22 +10,15 @@ use yii\web\AssetBundle;
  */
 class GoogleMapAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/stesi/yii2-google-maps';
+    public $sourcePath = '@vendor/stesi/yii2-google-maps/dist';
 
     public $css = [
         'css/yii2-google-maps.css',
     ];
 
     public $js = [
+        'js/marker-with-label.js',
         'js/yii2-google-maps.js',
-
-    ];
-
-    public $publishOptions = [
-        'only' => [
-            'css/yii2-google-maps.css',
-            'js/yii2-google-maps.js',
-        ]
     ];
 
     /**
