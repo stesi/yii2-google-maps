@@ -70,6 +70,8 @@
 
         this.map = this.maps.Map(mapDiv, options);
 
+        this.$map = $(mapDiv);
+
         this.directionsRenderer = [];
 
         this.routeDirections = function (options) {
@@ -131,6 +133,7 @@
                         var infoWindow = self.maps.InfoWindow(coord.infoWindowOptions);
                         marker.addListener('click', function () {
                             infoWindow.open(map, marker);
+                            self.$map.trigger("stesi.maps.infowindow.open", [infoWindow]);
                         });
                     }
                 }

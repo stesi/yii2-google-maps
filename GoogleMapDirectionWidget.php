@@ -100,14 +100,6 @@ class GoogleMapDirectionWidget extends Widget
 
     public function direction($options)
     {
-        foreach ($options['coords'] as &$coord) {
-            if (isset($coord['infoWindowOptions']['ajax'])) {
-                $ajax = $coord['infoWindowOptions']['ajax'];
-                unset($coord['infoWindowOptions']['ajax']);
-                $id = uniqid('map_info_window_');
-                $coord['infoWindowOptions']['content'] = Html::tag('div', '', ['id' => $id]);
-            }
-        }
         $this->script .= 'gMap.googleMaps("direction", ' . Json::encode($options) . ');';
     }
 
