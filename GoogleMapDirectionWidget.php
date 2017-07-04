@@ -2,7 +2,6 @@
 
 namespace stesi\googlemaps;
 
-use kartik\helpers\Html;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
