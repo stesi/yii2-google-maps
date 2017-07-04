@@ -90,21 +90,6 @@
                     stopover: true
                 });
 
-                // var markerOptions = {
-                //     position: latLng,
-                //     label: coord.markerOptions,
-                //     map: map
-                // };
-                // var marker = self.maps.Marker(markerOptions);
-                // var markerOptions = {
-                //     position: latLng,
-                //     // label: coord.markerOptions,
-                //     labelContent: "$425K 1313131313",
-                //     labelClass: "google-map-marker-label",
-                //     labelStyle: {},
-                //     labelAnchor: self.maps.Point(50, 0),
-                //     map: map
-                // };
                 if (coord.markerOptions) {
                     var markerOptions = $.extend({
                         labelClass: "google-map-marker-center-label",
