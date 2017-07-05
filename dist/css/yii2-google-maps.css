@@ -1,0 +1,21 @@
+.google-map-marker-label {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.google-map-marker-center-label {
+    color: white;
+    font-size: 12px;
+    overflow: visible !important;
+}
+
+.google-map-marker-center-label > div {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2px;
+    white-space: nowrap;
+    display: inline-block;
+    margin-left: -50%;
+}

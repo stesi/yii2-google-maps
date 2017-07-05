@@ -19,6 +19,9 @@ class GoogleMapDirectionWidget extends Widget
     const TRAVEL_MODE_WALKING = 'WALKING';
 
     const MAP_TYPE_HYBRID = 'google.maps.MapTypeId.HYBRID';
+    const MAP_TYPE_ROADMAP = 'google.maps.MapTypeId.ROADMAP';
+    const MAP_TYPE_SATELLITE = 'google.maps.MapTypeId.SATELLITE';
+    const MAP_TYPE_TERRAIN = 'google.maps.MapTypeId.TERRAIN';
 
     /**
      * @var string
@@ -86,7 +89,7 @@ class GoogleMapDirectionWidget extends Widget
 
         $this->mapOptions = ArrayHelper::merge([
             'zoom' => 12,
-            'mapTypeId' => self::MAP_TYPE_HYBRID,
+            'mapTypeId' => self::MAP_TYPE_ROADMAP,
         ], $this->mapOptions);
         $this->mapOptions['mapTypeId'] = new JsExpression($this->mapOptions['mapTypeId']);
 
