@@ -83,6 +83,7 @@ class GoogleMapShowMapWidget extends Widget
     {
         $view = $this->getView();
         GoogleMapAsset::register($view);
-        $view->registerJs('$("#' . $this->wrapperOptions['id'] . '").showMap(' . Json::encode($this->jsOptions) . ');');
+        $js = '$("#' . $this->wrapperOptions['id'] . '").showMap(' . Json::encode($this->jsOptions) . ');';
+        $view->registerJs('$(document).one("google.maps.initialized", function () {' . $js . '});');
     }
 }
