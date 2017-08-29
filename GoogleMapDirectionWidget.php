@@ -102,6 +102,16 @@ class GoogleMapDirectionWidget extends Widget
         $this->script .= 'gMap.googleMaps("direction", ' . Json::encode($options) . ');';
     }
 
+    public function showDirection($directionName)
+    {
+        $this->script .= 'gMap.googleMaps("showDirection", "' . $directionName . '");';
+    }
+
+    public function polyline($options)
+    {
+        $this->script .= 'gMap.googleMaps("polyline", ' . Json::encode($options) . ');';
+    }
+
     /**
      * @inheritdoc
      */

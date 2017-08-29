@@ -63,6 +63,10 @@
                 return new google.maps.DirectionsRenderer(options);
             },
 
+            Polyline: function (options) {
+                return new google.maps.Polyline(options);
+            },
+
             Point: function (x, y) {
                 return new google.maps.Point(x, y);
             }
@@ -143,9 +147,11 @@
                     }, options.renderOptions);
                     var directionsDisplay = self.maps.DirectionsRenderer(renderOptions);
                     directionsDisplay.setDirections(response);
-                    directionsDisplay.setMap(map);
                     if (options.directionName !== undefined) {
                         self.directionsRenderer[options.directionName] = directionsDisplay;
+                    }
+                    if (options.show !== false) {
+                        directionsDisplay.setMap(map);
                     }
                 } else {
                     // window.alert('Directions request failed due to ' + status);
@@ -167,6 +173,45 @@
             var renderer = self.directionsRenderer;
             if (renderer[directionName] !== undefined) {
                 renderer[directionName].setMap(null);
+            }
+        };
+
+        this.polylines = [];
+
+        this.polyline = function (options) {
+            var self = this;
+            var lineOptions = $.extend({
+                path: {},
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            }, options.lineOptions);
+
+            var coords = [];
+            $.each(options.coords, function (coordIndex, coord) {
+                var latLng = self.maps.LatLng(coord.lat, coord.lng);
+                coords.push(latLng);
+            });
+            lineOptions.path = coords;
+
+            self.polylines[options.lineName] = self.maps.Polyline(lineOptions);
+        };
+
+        this.showPolyline = function (lineName) {
+            var self = this;
+            var map = self.map;
+            var lines = self.polylines;
+            if (lines[lineName] !== undefined) {
+                lines[lineName].setMap(map);
+            }
+        };
+
+        this.hidePolyline = function (lineName) {
+            var self = this;
+            var map = self.map;
+            var lines = self.polylines;
+            if (lines[lineName] !== undefined) {
+                lines[lineName].setMap(null);
             }
         };
     }
@@ -198,6 +243,18 @@
 
         if (options === 'hideDirection') {
             gMaps.hideDirections(arguments[1]);
+        }
+
+        if (options === 'polyline') {
+            gMaps.polyline(arguments[1]);
+        }
+
+        if (options === 'showPolyline') {
+            gMaps.showPolyline(arguments[1]);
+        }
+
+        if (options === 'hidePolyline') {
+            gMaps.hidePolyline(arguments[1]);
         }
 
         return self;
