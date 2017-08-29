@@ -110,6 +110,6 @@ class GoogleMapDirectionWidget extends Widget
         $view = $this->getView();
         GoogleMapAsset::register($view);
 
-        $view->registerJs($this->script);
+        $view->registerJs('$(document).one("google.maps.initialized", function () {' . $this->script . '});');
     }
 }
