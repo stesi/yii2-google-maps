@@ -24,25 +24,27 @@ class GoogleMapAsset extends AssetBundle
     /**
      * @inheritdoc
      */
-    public function init()
-    {
-        parent::init();
-        $this->js[] = 'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&callback=google_maps_initialize&sensor=true&key=' . \Yii::$app->params['googleMapApiKey'];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function registerAssetFiles($view)
     {
-        $view->registerJs(<<<'JS'
-if (!window.google_maps_initialize) {
-    window.google_maps_initialize = function() {
+        $js = 'var apiUrl = "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&callback=google_maps_initialize&sensor=true&key=' . \Yii::$app->params['googleMapApiKey'] . '";';
+        $js .= <<<'JS'
+if (window.google && window.google.maps) {
+    if (!window.google_maps_initialize) {
         $(document).trigger("google.maps.initialized");
-    };
+    }
+} else {
+    if (!window.google_maps_initialize) {
+        window.google_maps_initialize = function() {
+            delete window.google_maps_initialize;
+            $(document).trigger("google.maps.initialized");
+        };
+    }
+    var s = document.createElement('script');
+    s.src = apiUrl;
+    document.body.appendChild(s);
 }
-JS
-            , \yii\web\View::POS_HEAD);
+JS;
+        $view->registerJs($js);
 
         parent::registerAssetFiles($view);
     }
