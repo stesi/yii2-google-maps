@@ -73,6 +73,9 @@
         };
 
         this.map = this.maps.Map(mapDiv, options);
+        this.getMap = function () {
+            return this.map;
+        };
 
         this.$map = $(mapDiv);
 
@@ -214,6 +217,43 @@
                 lines[lineName].setMap(null);
             }
         };
+
+        this.marker = function (options) {
+            var self = this;
+            var map = self.map;
+
+            var latLng = self.maps.LatLng(options.lat, options.lng);
+            var markerOptions = $.extend({
+                labelClass: "google-map-marker-center-label",
+                labelStyle: {}
+            }, options.markerOptions);
+
+            if (options.markerOptions.labelContent) {
+                markerOptions.labelContent = options.markerOptions.labelContent;
+                if (markerOptions.labelClass === "google-map-marker-center-label") {
+                    markerOptions.labelContent = "<div>" + markerOptions.labelContent + "</div>";
+                }
+            } else {
+                markerOptions.labelVisible = false;
+            }
+
+            markerOptions.map = map;
+            markerOptions.position = latLng;
+
+            if (options.markerOptions.labelAnchor) {
+                markerOptions.labelAnchor = self.maps.Point(options.markerOptions.labelAnchor[0], options.markerOptions.labelAnchor[1]);
+            }
+
+            var marker = self.maps.MarkerWithLabel(markerOptions);
+
+            if (options.infoWindowOptions) {
+                var infoWindow = self.maps.InfoWindow(options.infoWindowOptions);
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                    self.$map.trigger("stesi.maps.infowindow.open", [infoWindow]);
+                });
+            }
+        };
     }
 
     $.fn.googleMaps = function (options) {
@@ -231,6 +271,10 @@
 
         if (options === undefined) {
             return gMaps;
+        }
+
+        if (options === "map") {
+            return gMaps.getMap();
         }
 
         if (options === 'direction') {
@@ -255,6 +299,10 @@
 
         if (options === 'hidePolyline') {
             gMaps.hidePolyline(arguments[1]);
+        }
+
+        if (options === 'marker') {
+            gMaps.marker(arguments[1]);
         }
 
         return self;
